@@ -4,9 +4,9 @@
 
 ########## Dépendances 
 
-using Pkg
-Pkg.add("DataFrames")
-Pkg.add("Plots")
+# using Pkg
+# Pkg.add("DataFrames")
+# Pkg.add("Plots")
 
 using DataFrames
 using Plots
@@ -170,5 +170,29 @@ function Log_Rank(times, status, group, approx_pval = 1000000)
 
 end
 
-##### Test de la fonction 
 # res = Log_Rank(df_test.duree, df_test.statut, df_test.fonction)
+
+##### Graphe de n'importe quelle sortie de KM( )
+
+function KM_curve(KM_res)
+    
+    if typeof(KM_res) == DataFrame
+        p = plot(KM_res.temps, KM_res.S_KM, linetype =:steppost, label = "")
+        xlabel!("temps")
+        ylabel!("S_KM")
+
+        return p
+    
+    else
+        p = KM_curve(KM_res[:b])
+        k = 1
+        for i in KM_res
+            plot!(i.temps, i.S_KM, linetype =:steppost, label = string(keys(KM_res)[k]))
+            k += 1
+        end
+
+        return p 
+        
+    end
+
+end
